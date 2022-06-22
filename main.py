@@ -1,10 +1,16 @@
 import re, csv
-from os import listdir, environ
+from os import environ, path, listdir, mkdir
 from PyPDF2 import PdfFileReader
 
 debug = environ.get("DEBUG", 0)
+inpath = "./input"
 fields = ["Date", "Numéro CHQ", "Montant"]
 data = []
+
+# Check if input file path exists
+if not path.exists(inpath):
+    mkdir(inpath)
+    exit(f"Created {inpath} folder, please put your files inside it.")
 
 # Open PDFs and scan for wanted data
 for pdf in listdir("./input"):

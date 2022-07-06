@@ -4,7 +4,7 @@ from PyPDF2 import PdfFileReader
 
 debug = environ.get("DEBUG", 0)
 inpath = "./input"
-fields = ["Date", "Numéro CHQ", "Montant"]
+fields = ["Date", "Numéro CHQ", "Montant", "Vol"]
 data = []
 
 # Check if input file path exists
@@ -36,9 +36,17 @@ for pdf in listdir("./input"):
         sum = sep.join(regSum.findall(read))
         regCheck = re.compile(r'numéro[0-9]{7}')
         check = regCheck.search(read).group(0).replace("numéro", "")
+        regVol = re.compile(r'motif:vol')
+        vol = sep.join(regVol.findall(read))
+
+        # If stolen check, show it in export
+        if vol:
+            vol = 1
+        else:
+            vol = ""
 
         # Prepare data for CSV export
-        row = [ date, check, sum ]
+        row = [ date, check, sum, vol ]
         data.append(row)
 
         if debug:
